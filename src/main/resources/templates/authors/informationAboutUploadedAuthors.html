@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Результаты добавления авторов из файла</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/result.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${errorMessage}">
+				<p style="color: red;" th:text="${errorMessage}">Ошибка</p>
+			</div>
+			<div th:unless="${errorMessage}">
+				<div th:if="${ok.empty and notOk.empty}">
+					<p style="color: red;">Ошибка добавления авторов из файла</p>
+				</div>
+				<div th:unless="${ok.empty and notOk.empty}">
+					<div class="fail" th:if="${ok.empty}">Добавлено 0 авторов</div>
+					<div class="success" th:unless="${ok.empty}">
+						<h1>Добавлены следующие авторы:</h1>
+						<table>
+							<tr>
+								<th>ФИО</th>
+								<th>Дата рождения</th>
+							</tr>
+							<tr th:each="author : ${ok}">
+								<td>
+									<span th:text="${author.getLastName() + ' ' + author.getFirstName() + (author.getMiddleName() == null ? '' : ' ' + author.getMiddleName())}"></span>
+								</td>
+								<td>
+									<span th:text="${author.getBirthDate()}"></span>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="warning" th:if="${!notOk.empty}">
+						<span th:text="${'Не добавлено ' + notOk.size() + ' авторов(-а)'}"></span>
+						<details>
+							<summary>Возможные причины</summary>
+							<ul>
+								<li>Автор с заданным ФИО и Датой рождения уже существует</li>
+								<li>Неверно заполнены данные автора</li>
+							</ul>
+						</details>
+					</div>
+				</div>
+			</div>
+			
+			<form th:action="@{/authors/all}" th:method="GET">
+				<button>К списку авторов</button>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Меню</title>
+        <link rel="stylesheet" href="/css/general.css"/>
+        <link rel="stylesheet" href="/css/form.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Меню</h1>
+            <form th:action="@{/books/all}" th:method="GET">
+                <button>Книги</button>
+            </form>
+            <form th:action="@{/people/all}" th:method="GET">
+                <button>Читатели</button>
+            </form>
+            <form th:action="@{/authors/all}" th:method="GET">
+                <button>Авторы</button>
+            </form>
+            <form th:action="@{/publishers/all}" th:method="GET">
+                <button>Издательства</button>
+            </form>
+        </div>
+    </body>
+</html>

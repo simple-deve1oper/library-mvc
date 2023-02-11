@@ -1,0 +1,17 @@
+table {
+	border-collapse: collapse;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    margin: auto;
+}
+
+th, td {
+	color: #0f2027;
+    text-align: center;
+    border: 2px solid #8B4513;
+	border-radius: 4px;
+	padding: 10px 20px 10px 20px;
+}
+
+td.action {
+    border: 0;
+}

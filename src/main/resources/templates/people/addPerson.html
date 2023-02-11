@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Регистрация нового читателя</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/form.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<form id="form" th:method="POST" th:action="@{/people/registration}" th:object="${personForm}">
+				<h1>Регистрация нового читателя</h1>
+				<div class="form-control">
+					<label for="lastName"><b>Фамилия</b></label>
+					<input type="text" th:field="*{lastName}" id="lastName"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="firstName"><b>Имя</b></label>
+					<input type="text" th:field="*{firstName}" id="firstName"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="middleName"><b>Отчество</b></label>
+					<input type="text" th:field="*{middleName}" id="middleName"/>
+					<div style="color: gray; font-size: 14px;"><b>При наличии</b></div>
+					<div style="color: red;" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="birthDate"><b>Дата рождения</b></label>
+					<input type="date" th:field="*{birthDate}" id="birthDate"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="email"><b>Email</b></label>
+					<input type="text" th:field="*{email}" id="email"/>
+					<div style="color: gray; font-size: 14px;"><b>При наличии</b></div>
+					<div style="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="phoneNumber"><b>Номер телефона</b></label>
+					<input type="text" th:field="*{phoneNumber}" id="phoneNumber"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone number error</div>
+					<div class="error"></div>
+				</div>
+				<button type="submit">Регистрация</button>
+			</form>
+		</div>
+		
+		<script src="/js/jquery/jquery.js"></script>
+		<script src="/js/jquery/jquery.maskedinput.js"></script>
+		<script>
+			$(document).ready(function() {
+				$("#phoneNumber").mask("+7(999)999-99-99");
+			});
+		</script>
+		<script src="/js/people/personValidation.js"></script>
+		<script src="/js/general/todayDate.js"></script>
+	</body>
+</html>

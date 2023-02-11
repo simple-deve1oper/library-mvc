@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Список авторов книг</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/table.css"/>
+		<link rel="stylesheet" href="/css/form.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}"><u>Авторы</u></a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${errorMessage}">
+				<p style="color: red;" th:text="${errorMessage}"></p>
+			</div>
+
+			<h1>Список авторов</h1>
+			
+			<div th:if="${permit.isEmpty() and restrict.isEmpty()}">
+				<p style="color: red;">Не добавлено ни одного автора</p>
+			</div>
+			<div th:unless="${permit.isEmpty() and restrict.isEmpty()}">
+				<table>
+					<tr>
+						<th>ФИО</th>
+					    <th>Дата рождения</th>
+					</tr>
+					<tr th:each="author : ${permit}">
+						<td>
+							<span th:text="${author.getLastName() + ' ' + author.getFirstName() + (author.getMiddleName() == null ? '' : ' ' + author.getMiddleName())}"></span>
+						</td>
+						<td>
+							<span th:text="${author.getBirthDate()}"></span>
+						</td>
+						<td class="action">
+							<form th:action="@{/authors/delete/{id}(id=${author.getId()})}" th:method="DELETE">
+								<button>Удалить</button>
+							</form>
+						</td>
+					</tr>
+					<tr th:each="value : ${restrict}">
+						<td>
+							<span th:text="${value.getLastName() + ' ' + value.getFirstName() + (value.getMiddleName() == null ? '' : ' ' + value.getMiddleName())}"></span>
+						</td>
+						<td>
+							<span th:text="${value.getBirthDate()}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class="divButton">
+	            <button type="button" id="switching">Добавить авторов</button>
+	        </div>
+	        <div style="display: none;" class="divForm">
+	            <form style="margin-top: 10px;" th:method="POST" th:action="@{/authors/upload}" enctype="multipart/form-data">
+	                <div class="form-control">
+						<label for="file"><b>Выберите файл</b></label>
+	                	<input type="file" name="file" id="file" accept=".json"/>
+	                </div>
+	                <button type="submit">Загрузить</button>
+	            </form>
+        	</div>
+		</div>
+
+		<script src="/js/general/hideForm.js"></script>
+	</body>
+</html>

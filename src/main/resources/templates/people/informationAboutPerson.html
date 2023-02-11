@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Информация о читателе</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/table.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${person == null}">
+				<p style="color: red;" th:text="${errorMessage}"></p>
+				
+				<form th:action="@{/people/all}" th:method="GET">
+					<button>К списку читателей</button>
+				</form>
+			</div>
+			<div th:unless="${person == null}">
+				<h1>Информация о читателе</h1>
+				<table>
+					<tr>
+						<th>Фамилия</th>
+						<td><span th:text="${person.getBasicData().getLastName()}"></span></td>
+					<tr>
+					<tr>
+						<th>Имя</th>
+						<td><span th:text="${person.getBasicData().getFirstName()}"></span></td>
+					<tr>
+					<tr>
+						<th>Отчество</th>
+						<td th:if="${person.getBasicData().getMiddleName() == null}">-</td>
+						<td th:unless="${person.getBasicData().getMiddleName() == null}"><span th:text="${person.getBasicData().getMiddleName()}"></span></td>
+					<tr>
+					<tr>
+						<th>Дата рождения</th>
+						<td><span th:text="${person.getBasicData().getBirthDate()}"></span></td>
+					<tr>
+					<tr>
+						<th>Email</th>
+						<td th:if="${person.getAdditionalData().getEmail() == null}">-</td>
+						<td th:unless="${person.getAdditionalData().getEmail() == null}"><span th:text="${person.getAdditionalData().getEmail()}"></span></td>
+					<tr>
+					<tr>
+						<th>Номер телефона</th>
+						<td><span th:text="${person.getAdditionalData().getPhoneNumber()}"></span></td>
+					<tr>
+				</table>
+
+				<div th:if="${!books.isEmpty()}">
+					<p>Список книг взятых в аренду:</p>
+					<ul>
+						<li th:each="book : ${books}">
+							<a th:href="@{/books/info/{id}(id=${book.getId()})}" th:text="${book.getName() + ', ' + book.getPublicationYear()}"></a>
+							<form th:action="@{/people/{personId}/book/{bookId}/return(personId=${person.getId()},bookId=${book.getId()})}" th:method="PATCH">
+								<button type="submit">Вернуть</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+				
+				<form th:action="@{/people/edit/{id}(id=${person.getId()})}" th:method="GET">
+					<button>Изменить</button>
+				</form>
+				<form th:action="@{/people/all}" th:method="GET">
+					<button>К списку читателей</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

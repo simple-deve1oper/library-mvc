@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Добавление книги в каталог</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/form.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${duplicate}">
+				<p style="color: red;" th:text="${duplicate}"></p>
+			</div>
+
+			<form id="form" th:method="POST" th:action="@{/books/add}" th:object="${bookForm}">
+				<h1>Добавление новой книги в каталог</h1>
+				<div class="form-control">
+					<label for="nameBook"><b>Наименование</b></label>
+					<input type="text" th:field="*{name}" id="nameBook"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="authorId"><b>Автор</b></label>
+					<select th:object="${bookForm}" th:field="*{authorId}" id="authorId">
+						<option th:each="author : ${authors}" th:value="${author.getId()}"
+								th:text="${author.getLastName() + ' ' + author.getFirstName() + (author.getMiddleName() == null ? '' : ' ' + author.getMiddleName())}"></option>
+					</select>
+					<div style="color: red;" th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="publisherId"><b>Издательство</b></label>
+					<select th:object="${bookForm}" th:field="*{publisherId}" id="publisherId">
+						<option th:each="publisher : ${publishers}" th:value="${publisher.getId()}"
+								th:text="${publisher.getName()}"></option>
+					</select>
+					<div style="color: red;" th:if="${#fields.hasErrors('publisherId')}" th:errors="*{publisherId}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<div class="form-control">
+					<label for="publicationYear"><b>Год издания</b></label>
+					<input type="text" th:field="*{publicationYear}" id="publicationYear"/>
+					<div style="color: red;" th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}">Name error</div>
+					<div class="error"></div>
+				</div>
+				<button type="submit">Добавить</button>
+			</form>
+		</div>
+
+		<script src="/js/books/bookValidation.js"></script>
+	</body>
+</html>

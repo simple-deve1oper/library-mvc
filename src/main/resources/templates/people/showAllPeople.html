@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Список зарегистрированных читателей</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/table.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}"><u>Читатели</u></a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<h1>Список читателей</h1>
+			
+			<div th:if="${people.isEmpty()}">
+				<p style="color: red;">Не зарегистрировано ни одного читателя</p>
+			</div>
+			<div th:unless="${people.isEmpty()}">
+				<table>
+					<tr>
+						<th>ФИО</th>
+					    <th>Номер телефона</th>
+					</tr>
+					<tr th:each="person : ${people}">
+						<td>
+							<a th:href="@{/people/info/{id}(id=${person.getId()})}" th:text="${person.getBasicData().getLastName() + ' ' + person.getBasicData().getFirstName() + (person.getBasicData().getMiddleName() == null ? '' : ' ' + person.getBasicData().getMiddleName())}"></a>
+						</td>
+						<td>
+							<span th:text="${person.getAdditionalData().getPhoneNumber()}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<form th:action="@{/people/registration}" th:method="GET">
+				<button>Зарегистрировать читателя</button>
+			</form>
+		</div>
+	</body>
+</html>

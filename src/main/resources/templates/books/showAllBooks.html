@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Список книг</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/table.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}"><u>Книги</u></a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${errorMessage}">
+				<p style="color: red;" th:text="${errorMessage}"></p>
+			</div>
+			<div th:unless="${errorMessage}">
+				<h1>Список книг</h1>
+
+				<div th:if="${books.isEmpty()}">
+					<p style="color: red;">Не добавлено ни одной книги в каталог</p>
+				</div>
+				<div th:unless="${books.isEmpty()}">
+					<table>
+						<tr>
+							<th>Наименование</th>
+							<th>Год выпуска</th>
+							<th>Доступно</th>
+						</tr>
+						<tr th:each="book : ${books}">
+							<td>
+								<a th:href="@{/books/info/{id}(id=${book.getId()})}" th:text="${book.getName()}"></a>
+							</td>
+							<td>
+								<span th:text="${book.getPublicationYear()}"></span>
+							</td>
+							<td th:if="${book.isAvailable() == true}">Да</td>
+							<td th:unless="${book.isAvailable() == true}">Нет</td>
+						</tr>
+					</table>
+				</div>
+
+				<form th:action="@{/books/report}" th:method="GET">
+					<button>Получить отчёт</button>
+				</form>
+
+				<form th:action="@{/books/add}" th:method="GET">
+					<button>Добавить книгу</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

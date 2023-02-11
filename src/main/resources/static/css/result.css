@@ -1,0 +1,40 @@
+.success {
+    width: 395px;
+    border: 3px solid #90EE90;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: #90EE90;
+    border-radius: 4px;
+}
+
+.success table {
+    border-collapse: collapse;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.success th, td {
+    color: #000000;
+    border: 2px solid #000000;
+    padding: 10px;
+}
+
+.fail {
+    width: 395px;
+    border: 3px solid #DC143C;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: #DC143C;
+    border-radius: 4px;
+}
+
+.warning {
+    width: 395px;
+    border: 3px solid #FF6347;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: #FF6347;
+    border-radius: 4px;
+}
+

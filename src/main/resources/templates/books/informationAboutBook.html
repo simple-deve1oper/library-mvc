@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Информация о книге</title>
+		<link rel="stylesheet" href="/css/general.css"/>
+		<link rel="stylesheet" href="/css/table.css"/>
+		<link rel="stylesheet" href="/css/navbar.css"/>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">На главную</a></li>
+				<li><a th:href="@{/books/all}">Книги</a></li>
+				<li><a th:href="@{/people/all}">Читатели</a></li>
+				<li><a th:href="@{/authors/all}">Авторы</a></li>
+				<li><a th:href="@{/publishers/all}">Издательства</a></li>
+			</ul>
+		</nav>
+
+		<div class="container">
+			<div th:if="${book == null}">
+				<p style="color: red;" th:text="${errorMessage}"></p>
+				
+				<form th:action="@{/books/all}" th:method="GET">
+					<button>К списку книг</button>
+				</form>
+			</div>
+			<div th:unless="${book == null}">
+				<h1>Информация о книге</h1>
+				<table>
+					<tr>
+						<th>Наименование</th>
+						<td><span th:text="${book.getName()}"></span></td>
+					<tr>
+					<tr>
+						<th>Автор</th>
+						<td><span th:text="${book.getAuthor().getLastName() + ' ' + book.getAuthor().getFirstName() + (book.getAuthor().getMiddleName() == null ? '' : ' ' + book.getAuthor().getMiddleName())}"></span></td>
+					<tr>
+					<tr>
+						<th>Издательство</th>
+						<td><span th:text="${book.getPublisher().getName()}"></span></td>
+					<tr>
+					<tr>
+						<th>Год выпуска</th>
+						<td><span th:text="${book.getPublicationYear()}"></span></td>
+					<tr>
+					<tr>
+						<th>Выдача</th>
+						<td th:if="${book.isAvailable() == true}">
+							<form th:object="${reportForm}" th:action="@{/books/{bookId}/issue(bookId=${book.getId()})}" th:method="POST">
+								<div class="form-control">
+									<label for="person"><b>Читатель</b></label>
+									<select th:object="${reportForm}" th:field="*{personId}" id="person">
+										<option th:each="person : ${people}" th:value="${person.getId()}"
+												th:text="${person.getBasicData().getLastName() + ' ' + person.getBasicData().getFirstName() + (person.getBasicData().getMiddleName() == null ? '' : ' ' + person.getBasicData().getMiddleName())}"></option>
+									</select>
+									<div class="error"></div>
+								</div>
+								<input type="hidden" id="book" th:value="${book.getId()}" name="book">
+								<button type="submit">Выдать</button>
+							</form>
+						</td>
+						<td th:unless="${book.isAvailable() == true}">
+							<div>
+								<a th:href="@{/people/info/{id}(id=${person.getId()})}" th:text="${person.getBasicData().getLastName() + ' ' + person.getBasicData().getFirstName() + (person.getBasicData().getMiddleName() == null ? '' : ' ' + person.getBasicData().getMiddleName())}"></a>
+							</div>
+							<form th:action="@{/books/{bookId}/available/{reportId}(bookId=${book.getId()},reportId=${reportId})}" th:method="PATCH">
+								<button type="submit">Вернуть</button>
+							</form>
+						</td>
+					</tr>
+				</table>
+				
+				<form th:action="@{/books/edit/{id}(id=${book.getId()})}" th:method="GET">
+					<button>Изменить</button>
+				</form>
+				<form th:action="@{/books/delete/{id}(id=${book.getId()})}" th:method="DELETE">
+					<button>Удалить</button>
+				</form>
+				<form th:action="@{/books/all}" th:method="GET">
+					<button>К списку читателей</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
